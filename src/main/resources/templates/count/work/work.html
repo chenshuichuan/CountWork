@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('教学工作量列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>学期：</label>
+                                <input type="text" name="term"/>
+                            </li>
+                            <li>
+                                <label>学院：</label>
+                                <input type="text" name="academy"/>
+                            </li>
+                            <li>
+                                <label>年级：</label>
+                                <input type="text" name="grade"/>
+                            </li>
+                            <li>
+                                <label>课程代码：</label>
+                                <input type="text" name="courseCode"/>
+                            </li>
+                            <li>
+                                <label>课程名称：</label>
+                                <input type="text" name="courseName"/>
+                            </li>
+                            <li>
+                                <label>专业名称：</label>
+                                <input type="text" name="major"/>
+                            </li>
+                            <li>
+                                <label>班级名称：</label>
+                                <input type="text" name="className"/>
+                            </li>
+                            <li>
+                                <label>学分：</label>
+                                <input type="text" name="credit"/>
+                            </li>
+                            <li>
+                                <label>学时：</label>
+                                <input type="text" name="hours"/>
+                            </li>
+                            <li>
+                                <label>实验学时：</label>
+                                <input type="text" name="experimentHours"/>
+                            </li>
+                            <li>
+                                <label>审核人：</label>
+                                <input type="text" name="reviewer"/>
+                            </li>
+                            <li>
+                                <label>是否通过：</label>
+                                <input type="text" name="isOk"/>
+                            </li>
+                            <li>
+                                <label>审核状态：</label>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>下一步骤：</label>
+                                <select name="nextStatus">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="count:work:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="count:work:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="count:work:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="count:work:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('count:work:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('count:work:remove')}]];
+        var prefix = ctx + "count/work";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "教学工作量",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'term', 
+                    title: '学期'
+                },
+                {
+                    field: 'academy', 
+                    title: '学院'
+                },
+                {
+                    field: 'grade', 
+                    title: '年级'
+                },
+                {
+                    field: 'courseCode', 
+                    title: '课程代码'
+                },
+                {
+                    field: 'courseName', 
+                    title: '课程名称'
+                },
+                {
+                    field: 'major', 
+                    title: '专业名称'
+                },
+                {
+                    field: 'className', 
+                    title: '班级名称'
+                },
+                {
+                    field: 'credit', 
+                    title: '学分'
+                },
+                {
+                    field: 'hours', 
+                    title: '学时'
+                },
+                {
+                    field: 'experimentHours', 
+                    title: '实验学时'
+                },
+                {
+                    field: 'reviewer', 
+                    title: '审核人'
+                },
+                {
+                    field: 'isOk', 
+                    title: '是否通过'
+                },
+                {
+                    field: 'status', 
+                    title: '审核状态'
+                },
+                {
+                    field: 'nextStatus', 
+                    title: '下一步骤'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.count.work.mapper.WorkMapper">
+    
+    <resultMap type="Work" id="WorkResult">
+        <result property="id"    column="id"    />
+        <result property="term"    column="term"    />
+        <result property="academy"    column="academy"    />
+        <result property="grade"    column="grade"    />
+        <result property="courseCode"    column="course_code"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="major"    column="major"    />
+        <result property="className"    column="class_name"    />
+        <result property="credit"    column="credit"    />
+        <result property="hours"    column="hours"    />
+        <result property="experimentHours"    column="experiment_hours"    />
+        <result property="reviewer"    column="reviewer"    />
+        <result property="isOk"    column="is_ok"    />
+        <result property="status"    column="status"    />
+        <result property="nextStatus"    column="next_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWorkVo">
+        select id, term, academy, grade, course_code, course_name, major, class_name, credit, hours, experiment_hours, reviewer, is_ok, status, next_status, create_time, update_time from cw_work
+    </sql>
+
+    <select id="selectWorkList" parameterType="Work" resultMap="WorkResult">
+        <include refid="selectWorkVo"/>
+        <where>  
+            <if test="term != null  and term != ''"> and term = #{term}</if>
+            <if test="academy != null  and academy != ''"> and academy = #{academy}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="courseCode != null  and courseCode != ''"> and course_code = #{courseCode}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="major != null  and major != ''"> and major = #{major}</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="credit != null "> and credit = #{credit}</if>
+            <if test="hours != null "> and hours = #{hours}</if>
+            <if test="experimentHours != null "> and experiment_hours = #{experimentHours}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="isOk != null "> and is_ok = #{isOk}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="nextStatus != null "> and next_status = #{nextStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectWorkById" parameterType="Integer" resultMap="WorkResult">
+        <include refid="selectWorkVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWork" parameterType="Work">
+        insert into cw_work
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="term != null  and term != ''">term,</if>
+            <if test="academy != null  and academy != ''">academy,</if>
+            <if test="grade != null  and grade != ''">grade,</if>
+            <if test="courseCode != null  and courseCode != ''">course_code,</if>
+            <if test="courseName != null  and courseName != ''">course_name,</if>
+            <if test="major != null  and major != ''">major,</if>
+            <if test="className != null  and className != ''">class_name,</if>
+            <if test="credit != null ">credit,</if>
+            <if test="hours != null ">hours,</if>
+            <if test="experimentHours != null ">experiment_hours,</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer,</if>
+            <if test="isOk != null ">is_ok,</if>
+            <if test="status != null ">status,</if>
+            <if test="nextStatus != null ">next_status,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="term != null  and term != ''">#{term},</if>
+            <if test="academy != null  and academy != ''">#{academy},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="courseCode != null  and courseCode != ''">#{courseCode},</if>
+            <if test="courseName != null  and courseName != ''">#{courseName},</if>
+            <if test="major != null  and major != ''">#{major},</if>
+            <if test="className != null  and className != ''">#{className},</if>
+            <if test="credit != null ">#{credit},</if>
+            <if test="hours != null ">#{hours},</if>
+            <if test="experimentHours != null ">#{experimentHours},</if>
+            <if test="reviewer != null  and reviewer != ''">#{reviewer},</if>
+            <if test="isOk != null ">#{isOk},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="nextStatus != null ">#{nextStatus},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWork" parameterType="Work">
+        update cw_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="term != null  and term != ''">term = #{term},</if>
+            <if test="academy != null  and academy != ''">academy = #{academy},</if>
+            <if test="grade != null  and grade != ''">grade = #{grade},</if>
+            <if test="courseCode != null  and courseCode != ''">course_code = #{courseCode},</if>
+            <if test="courseName != null  and courseName != ''">course_name = #{courseName},</if>
+            <if test="major != null  and major != ''">major = #{major},</if>
+            <if test="className != null  and className != ''">class_name = #{className},</if>
+            <if test="credit != null ">credit = #{credit},</if>
+            <if test="hours != null ">hours = #{hours},</if>
+            <if test="experimentHours != null ">experiment_hours = #{experimentHours},</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer = #{reviewer},</if>
+            <if test="isOk != null ">is_ok = #{isOk},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="nextStatus != null ">next_status = #{nextStatus},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWorkById" parameterType="Integer">
+        delete from cw_work where id = #{id}
+    </delete>
+
+    <delete id="deleteWorkByIds" parameterType="String">
+        delete from cw_work where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
