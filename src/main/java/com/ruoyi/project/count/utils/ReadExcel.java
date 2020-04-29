@@ -1,4 +1,4 @@
-package com.ruoyi.project.count;
+package com.ruoyi.project.count.utils;
 
 import com.ruoyi.project.count.work.domain.Work;
 import com.ruoyi.project.system.files.domain.Files;

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.count.check.mapper.CheckMapper">
+    
+    <resultMap type="Check" id="CheckResult">
+        <result property="id"    column="id"    />
+        <result property="status"    column="status"    />
+        <result property="reviewer"    column="reviewer"    />
+        <result property="workId"    column="work_id"    />
+        <result property="checked"    column="checked"    />
+        <result property="remark"    column="remark"    />
+        <result property="passed"    column="passed"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCheckVo">
+        select id, status, reviewer, work_id, checked, remark, passed, create_time, update_time from cw_check
+    </sql>
+
+    <select id="selectCheckList" parameterType="Check" resultMap="CheckResult">
+        <include refid="selectCheckVo"/>
+        <where>  
+            <if test="status != null "> and status = #{status}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="workId != null "> and work_id = #{workId}</if>
+            <if test="checked != null "> and checked = #{checked}</if>
+            <if test="passed != null "> and passed = #{passed}</if>
+        </where>
+    </select>
+    
+    <select id="selectCheckById" parameterType="Integer" resultMap="CheckResult">
+        <include refid="selectCheckVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCheck" parameterType="Check" useGeneratedKeys="true" keyProperty="id">
+        insert into cw_check
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="status != null ">status,</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer,</if>
+            <if test="workId != null ">work_id,</if>
+            <if test="checked != null ">checked,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="passed != null ">passed,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="status != null ">#{status},</if>
+            <if test="reviewer != null  and reviewer != ''">#{reviewer},</if>
+            <if test="workId != null ">#{workId},</if>
+            <if test="checked != null ">#{checked},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="passed != null ">#{passed},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCheck" parameterType="Check">
+        update cw_check
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null ">status = #{status},</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer = #{reviewer},</if>
+            <if test="workId != null ">work_id = #{workId},</if>
+            <if test="checked != null ">checked = #{checked},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="passed != null ">passed = #{passed},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckById" parameterType="Integer">
+        delete from cw_check where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckByIds" parameterType="String">
+        delete from cw_check where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

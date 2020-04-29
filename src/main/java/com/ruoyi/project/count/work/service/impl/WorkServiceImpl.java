@@ -1,13 +1,14 @@
 package com.ruoyi.project.count.work.service.impl;
 
-import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.text.Convert;
+import com.ruoyi.project.count.work.domain.Work;
+import com.ruoyi.project.count.work.mapper.WorkMapper;
+import com.ruoyi.project.count.work.service.IWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.project.count.work.mapper.WorkMapper;
-import com.ruoyi.project.count.work.domain.Work;
-import com.ruoyi.project.count.work.service.IWorkService;
-import com.ruoyi.common.utils.text.Convert;
+
+import java.util.List;
 
 /**
  * 教学工作量Service业务层处理
@@ -28,7 +29,7 @@ public class WorkServiceImpl implements IWorkService
      * @return 教学工作量
      */
     @Override
-    public Work selectWorkById(Long id)
+    public Work selectWorkById(Integer id)
     {
         return workMapper.selectWorkById(id);
     }
@@ -90,7 +91,7 @@ public class WorkServiceImpl implements IWorkService
      * @return 结果
      */
     @Override
-    public int deleteWorkById(Long id)
+    public int deleteWorkById(Integer id)
     {
         return workMapper.deleteWorkById(id);
     }

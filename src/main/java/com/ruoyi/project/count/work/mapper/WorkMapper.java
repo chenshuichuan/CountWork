@@ -1,7 +1,8 @@
 package com.ruoyi.project.count.work.mapper;
 
-import java.util.List;
 import com.ruoyi.project.count.work.domain.Work;
+
+import java.util.List;
 
 /**
  * 教学工作量Mapper接口
@@ -17,7 +18,7 @@ public interface WorkMapper
      * @param id 教学工作量ID
      * @return 教学工作量
      */
-    public Work selectWorkById(Long id);
+    public Work selectWorkById(Integer id);
 
     /**
      * 查询教学工作量列表
@@ -49,7 +50,7 @@ public interface WorkMapper
      * @param id 教学工作量ID
      * @return 结果
      */
-    public int deleteWorkById(Long id);
+    public int deleteWorkById(Integer id);
 
     /**
      * 批量删除教学工作量

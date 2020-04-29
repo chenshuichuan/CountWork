@@ -5,7 +5,8 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.common.utils.text.Convert;
 import com.ruoyi.framework.web.domain.AjaxResult;
-import com.ruoyi.project.count.ReadExcel;
+import com.ruoyi.project.count.utils.IProcessService;
+import com.ruoyi.project.count.utils.ReadExcel;
 import com.ruoyi.project.count.work.domain.Work;
 import com.ruoyi.project.count.work.service.WorkRepository;
 import com.ruoyi.project.system.dept.service.IDeptService;
@@ -39,6 +40,8 @@ public class FilesServiceImpl implements IFilesService {
     private WorkRepository workRepository;
     @Autowired
     private IDeptService iDeptService;
+    @Autowired
+    private IProcessService processService;
     /**
      * 查询文件上传信息
      *
@@ -153,6 +156,9 @@ public class FilesServiceImpl implements IFilesService {
         return list;
     }
     private Work findByOther(Work work){
+         /** 通过“学期term+学院academy+grade+courseCode+className”作为唯一数据判断，
+          * 进而覆盖更新数据，防止重复解析
+          */
         return workRepository.findByTermAndAcademyAndGradeAndCourseCodeAndClassName(
                 work.getTerm(),work.getAcademy(),work.getGrade(),work.getCourseCode(),work.getClassName());
     }
@@ -164,23 +170,21 @@ public class FilesServiceImpl implements IFilesService {
             List<Work> workList = ReadExcel.readExcel(files,academy);
             System.out.println("list size="+workList.size());
             for (Work work: workList) {
-                /*
-                 * 通过“学期term+学院academy+grade+courseCode+className”作为唯一数据判断，进而覆盖更新数据，防止重复解析计划
-                 */
                 Work sqlData = findByOther(work);
                 //如果已经存在，则覆盖原mysql中的数据进行更新
                 if (sqlData!=null){
                     work.setId(sqlData.getId());
                 }
-                workRepository.save(work);
+                Work temp = workRepository.save(work);
+                //生成“待管理员初审的审核单
+                temp.setCheckId(processService.addAndSaveCheck(temp,temp.getNextStatus(),user.getLoginName()));
+                workRepository.save(temp);
             }
-            return AjaxResult.success("解析计划成功！");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
+            return AjaxResult.success("导入文件成功！");
+        } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
         }
-        return AjaxResult.error("解析计划失败！");
+        return AjaxResult.error("导入文件失败！");
     }
 
 }
