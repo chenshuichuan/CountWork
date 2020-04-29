@@ -12,5 +12,6 @@ import java.util.List;
  * Date: 2019/3/10
  */
 public interface FilesRepository extends JpaRepository<Files,Integer> {
-    List<Files> findByCreateByName(String name);
+    //根据文件后缀查询文件
+    List<Files> findBySuffix(String suffix);
 }

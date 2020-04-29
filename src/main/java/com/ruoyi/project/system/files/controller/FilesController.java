@@ -3,13 +3,16 @@ package com.ruoyi.project.system.files.controller;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.project.system.files.domain.Files;
+import com.ruoyi.project.system.files.service.FilesRepository;
 import com.ruoyi.project.system.files.service.IFilesService;
+import com.ruoyi.project.system.user.domain.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 文件上传Controller
@@ -41,6 +45,8 @@ public class FilesController extends BaseController
     private static String Save_Url = FileUploadUtils.getDefaultBaseDir();
     @Autowired
     private IFilesService filesService;
+    @Autowired
+    private FilesRepository filesRepository;
 
     @RequiresPermissions("system:files:view")
     @GetMapping()
@@ -122,6 +128,11 @@ public class FilesController extends BaseController
             if (file != null) {
                 File desc = FileUploadUtils.getAbsoluteFile(Save_Url, files.getUrl());
                 file.transferTo(desc);
+
+                User user = ShiroUtils.getSysUser();
+                log.debug("当前用户："+user.getLoginName());
+                log.debug(user.getDept().toString());
+                filesService.readXlsFile(files,user);
             }
         } catch (Exception e) {
             log.error("保存失败，请检查后重试！", e);
@@ -216,5 +227,25 @@ public class FilesController extends BaseController
             out.close();
         }
 
+    }
+    /**
+     * 根据选择的文件生成计划(仅xls计划文件)
+     * 默认计划文件为xls后缀的文件
+     */
+    @RequiresPermissions("file:add")
+    @PostMapping("/readXlsFile")
+    @Log(title = "生成计划", businessType = BusinessType.OTHER)
+    @ResponseBody
+    public AjaxResult readXlsFile(Integer id) {
+        Optional<Files> optionalFiles = filesRepository.findById(id);
+        if(optionalFiles.isPresent()){
+            Files files = optionalFiles.get();
+            User user = ShiroUtils.getSysUser();
+
+            log.debug("当前用户："+user.getLoginName());
+            log.debug(user.getDept().toString());
+            return filesService.readXlsFile(files,user);
+        }
+        return AjaxResult.error("未找到要解析的xls文件记录！");
     }
 }

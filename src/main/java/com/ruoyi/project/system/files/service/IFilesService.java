@@ -1,6 +1,8 @@
 package com.ruoyi.project.system.files.service;
 
+import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.project.system.files.domain.Files;
+import com.ruoyi.project.system.user.domain.User;
 
 import java.util.List;
 
@@ -55,5 +57,8 @@ public interface IFilesService {
 
     List<Files> selectFilesListNoSave(Files files);
 
-    List<Files> findByCreateByName(String name);
+    /**
+     *读取和保存excel表格数据
+     */
+    AjaxResult readXlsFile(Files files, User user);
 }

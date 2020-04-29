@@ -4,15 +4,23 @@ import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.common.utils.text.Convert;
+import com.ruoyi.framework.web.domain.AjaxResult;
+import com.ruoyi.project.count.ReadExcel;
+import com.ruoyi.project.count.work.domain.Work;
+import com.ruoyi.project.count.work.service.WorkRepository;
+import com.ruoyi.project.system.dept.service.IDeptService;
 import com.ruoyi.project.system.files.domain.Files;
 import com.ruoyi.project.system.files.mapper.FilesMapper;
 import com.ruoyi.project.system.files.service.FilesRepository;
 import com.ruoyi.project.system.files.service.IFilesService;
+import com.ruoyi.project.system.user.domain.User;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -27,6 +35,10 @@ public class FilesServiceImpl implements IFilesService {
     private FilesMapper filesMapper;
     @Autowired
     private FilesRepository filesRepository;
+    @Autowired
+    private WorkRepository workRepository;
+    @Autowired
+    private IDeptService iDeptService;
     /**
      * 查询文件上传信息
      *
@@ -140,10 +152,35 @@ public class FilesServiceImpl implements IFilesService {
 
         return list;
     }
+    private Work findByOther(Work work){
+        return workRepository.findByTermAndAcademyAndGradeAndCourseCodeAndClassName(
+                work.getTerm(),work.getAcademy(),work.getGrade(),work.getCourseCode(),work.getClassName());
+    }
 
     @Override
-    public List<Files> findByCreateByName(String name) {
-        return filesRepository.findByCreateByName(name);
+    public AjaxResult readXlsFile(Files files, User user) {
+        String academy =iDeptService.selectDeptById(user.getDept().getParentId()).getDeptName();
+        try {
+            List<Work> workList = ReadExcel.readExcel(files,academy);
+            System.out.println("list size="+workList.size());
+            for (Work work: workList) {
+                /*
+                 * 通过“学期term+学院academy+grade+courseCode+className”作为唯一数据判断，进而覆盖更新数据，防止重复解析计划
+                 */
+                Work sqlData = findByOther(work);
+                //如果已经存在，则覆盖原mysql中的数据进行更新
+                if (sqlData!=null){
+                    work.setId(sqlData.getId());
+                }
+                workRepository.save(work);
+            }
+            return AjaxResult.success("解析计划成功！");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        }
+        return AjaxResult.error("解析计划失败！");
     }
 
 }
