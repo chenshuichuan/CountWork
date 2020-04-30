@@ -8,7 +8,9 @@ import com.ruoyi.project.count.work.service.IWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教学工作量Service业务层处理
@@ -95,4 +97,28 @@ public class WorkServiceImpl implements IWorkService
     {
         return workMapper.deleteWorkById(id);
     }
+
+    @Override
+    public List<Work> selectWorkListByIds(Work work, String[] ids) {
+        Map<String,Object> map = new HashMap<>();
+
+        map.put("term",work.getTerm());
+        map.put("academy",work.getAcademy());
+        map.put("grade",work.getGrade());
+        map.put("courseCode",work.getCourseCode());
+        map.put("courseName",work.getCourseName());
+
+        map.put("major",work.getMajor());
+        map.put("reviewer",work.getReviewer());
+        map.put("isOk",work.getIsOk());
+
+        map.put("status",work.getStatus());
+        map.put("nextStatus",work.getNextStatus());
+        map.put("counted",work.getCounted());
+
+        map.put("array",ids);
+        return workMapper.selectWorkListByIds(map);
+    }
+
+
 }

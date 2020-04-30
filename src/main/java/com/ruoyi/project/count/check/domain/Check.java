@@ -157,10 +157,10 @@ public class Check
         return passed;
     }
 
-    public boolean isChecked(){
+    public boolean checked(){
         return 1 == checked;
     }
-    public boolean isPassed(){
+    public boolean passed(){
         return 1 == passed;
     }
     @Override

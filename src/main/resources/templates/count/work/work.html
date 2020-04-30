@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>学期：</label>
+                                <label>统计批次：</label>
                                 <input type="text" name="term"/>
                             </li>
                             <li>
@@ -39,46 +39,37 @@
                                 <input type="text" name="className"/>
                             </li>
                             <li>
-                                <label>班级人数：</label>
-                                <input type="text" name="number"/>
-                            </li>
-                            <li>
-                                <label>学分：</label>
-                                <input type="text" name="credit"/>
-                            </li>
-                            <li>
-                                <label>学时：</label>
-                                <input type="text" name="hours"/>
-                            </li>
-                            <li>
-                                <label>实验学时：</label>
-                                <input type="text" name="experimentHours"/>
-                            </li>
-                            <li>
                                 <label>审核人：</label>
                                 <input type="text" name="reviewer"/>
                             </li>
                             <li>
                                 <label>是否通过：</label>
-                                <input type="text" name="isOk"/>
+                                <!--<input type="text" name="isOk"/>-->
+                                <select name="isOk" th:with="type=${@dict.getType('check_pass')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <label>审核状态：</label>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                <select name="status" th:with="type=${@dict.getType('check_status')}">
+                                     <option value="">所有</option>
+                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
                                 <label>下一步骤：</label>
-                                <select name="nextStatus">
+                                <select name="nextStatus" th:with="type=${@dict.getType('check_next')}">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
                                 <label>已统计：</label>
-                                <input type="text" name="counted"/>
+                                <select name="counted" th:with="type=${@dict.getType('sys_yes_no')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -102,6 +93,7 @@
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="count:work:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
+
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -112,6 +104,11 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('count:work:edit')}]];
         var removeFlag = [[${@permission.hasPermi('count:work:remove')}]];
+        var checkStatus = [[${@dict.getType('check_status')}]];
+        var checkNext = [[${@dict.getType('check_next')}]];
+        var isOk = [[${@dict.getType('check_pass')}]];
+        var counted = [[${@dict.getType('check_yes_no')}]];
+
         var prefix = ctx + "count/work";
 
         $(function() {
@@ -181,18 +178,31 @@
                 {
                     field: 'isOk', 
                     title: '是否通过'
+                    ,
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(isOk, value);
+                    }
                 },
                 {
                     field: 'status', 
-                    title: '审核状态'
+                    title: '审核状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(checkStatus, value);
+                    }
                 },
                 {
                     field: 'nextStatus', 
-                    title: '下一步骤'
+                    title: '下一步骤',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(checkNext, value);
+                    }
                 },
                 {
                     field: 'counted', 
-                    title: '已统计'
+                    title: '已统计',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(counted, value);
+                    }
                 },
                 {
                     title: '操作',
@@ -209,4 +219,5 @@
         });
     </script>
 </body>
+
 </html>

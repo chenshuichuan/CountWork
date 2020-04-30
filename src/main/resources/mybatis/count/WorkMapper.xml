@@ -53,7 +53,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="checkId != null "> and check_id = #{checkId}</if>
         </where>
     </select>
-    
+
+    <select id="selectWorkListByIds" parameterType="java.util.Map" resultMap="WorkResult">
+        <include refid="selectWorkVo"/>
+        <where> id in
+            <foreach item="id" collection="array" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+            <if test="term != null  and term != ''"> and term like concat('%', #{term}, '%')</if>
+            <if test="academy != null  and academy != ''"> and academy = #{academy}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="courseCode != null  and courseCode != ''"> and course_code = #{courseCode}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="major != null  and major != ''"> and major = #{major}</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="isOk != null "> and is_ok = #{isOk}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="nextStatus != null "> and next_status = #{nextStatus}</if>
+            <if test="counted != null "> and counted = #{counted}</if>
+            <if test="checkId != null "> and check_id = #{checkId}</if>
+        </where>
+    </select>
+
     <select id="selectWorkById" parameterType="Integer" resultMap="WorkResult">
         <include refid="selectWorkVo"/>
         where id = #{id}

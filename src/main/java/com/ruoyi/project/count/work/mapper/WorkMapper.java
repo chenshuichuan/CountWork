@@ -3,6 +3,7 @@ package com.ruoyi.project.count.work.mapper;
 import com.ruoyi.project.count.work.domain.Work;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教学工作量Mapper接口
@@ -59,4 +60,6 @@ public interface WorkMapper
      * @return 结果
      */
     public int deleteWorkByIds(String[] ids);
+
+    public List<Work> selectWorkListByIds(Map<String,Object> map);
 }

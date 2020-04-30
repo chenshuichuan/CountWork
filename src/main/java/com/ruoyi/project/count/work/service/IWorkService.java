@@ -59,4 +59,6 @@ public interface IWorkService
      * @return 结果
      */
     public int deleteWorkById(Integer id);
+
+    public List<Work> selectWorkListByIds(Work work,String[]ids);
 }

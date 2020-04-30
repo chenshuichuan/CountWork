@@ -10,7 +10,7 @@
           enctype="multipart/form-data" th:object="${files}"> <!--method="POST"  enctype="multipart/form-data">-->
         <input type="hidden" id="id" th:field="*{id}" name="id">
         <div class="form-group">
-            <label class="col-sm-3 control-label">统计批次：</label>
+            <label class="col-sm-3 control-label">审核批次名称：</label>
             <div class="col-sm-8">
                 <input id="fileName" name="fileName" th:field="*{fileName}" class="form-control" type="text" placeholder="作为统计范围的标志">
             </div>
@@ -29,7 +29,7 @@
         <div class="form-group">
             <style type="text/css">
             </style>
-            <label class="col-sm-3 control-label">文件：</label>
+            <label class="col-sm-3 control-label">导入文件：</label>
             <div class="col-sm-8">
                 <div class="file-loading" style="width: 80%">
                     <input id="files" class="file" name="file" type="file" data-show-upload="false" language="zh"

@@ -1,6 +1,7 @@
 package com.ruoyi.project.count.check.controller;
 
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
@@ -47,6 +48,11 @@ public class CheckController extends BaseController
     public TableDataInfo list(Check check)
     {
         startPage();
+        if("admin".equals(ShiroUtils.getLoginName())){
+        }
+        else{
+            check.setReviewer(ShiroUtils.getLoginName());
+        }
         List<Check> list = checkService.selectCheckList(check);
         return getDataTable(list);
     }

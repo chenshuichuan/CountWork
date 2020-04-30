@@ -1,11 +1,14 @@
 package com.ruoyi.project.count.work.controller;
 
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import com.ruoyi.project.count.check.domain.Check;
+import com.ruoyi.project.count.check.service.CheckRepository;
 import com.ruoyi.project.count.work.domain.Work;
 import com.ruoyi.project.count.work.service.IWorkService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -30,6 +33,8 @@ public class WorkController extends BaseController
 
     @Autowired
     private IWorkService workService;
+    @Autowired
+    private CheckRepository checkRepository;
 
     @RequiresPermissions("count:work:view")
     @GetMapping()
@@ -47,7 +52,19 @@ public class WorkController extends BaseController
     public TableDataInfo list(Work work)
     {
         startPage();
-        List<Work> list = workService.selectWorkList(work);
+        List<Work> list = null;
+        if("admin".equals(ShiroUtils.getLoginName())){
+            list =workService.selectWorkList(work);
+        }
+        else{
+            List<Check> checkList =
+                    checkRepository.findByReviewerAndChecked(ShiroUtils.getLoginName(),0);
+            String[] ids = new String[checkList.size()];
+            for (int i = 0; i < checkList.size(); i++) {
+                ids[i] = String.valueOf(checkList.get(i).getWorkId());
+            }
+            list = workService.selectWorkListByIds(work,ids);
+        }
         return getDataTable(list);
     }
 
