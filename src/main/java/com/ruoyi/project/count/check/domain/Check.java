@@ -63,6 +63,7 @@ public class Check
     @Excel(name = "备注")
     @Column(name = "remark" )
     private String remark;
+
     public Check(){
 
     }
