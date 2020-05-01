@@ -81,6 +81,8 @@
             <input name="reviewer" th:field="*{reviewer}" type="hidden">
             <input name="workId" th:field="*{workId}" type="hidden">
             <input name="checked" th:field="*{checked}" type="hidden">
+            <input name="createTime" th:field="*{createTime}" type="hidden">
+            <input name="updateTime" th:field="*{updateTime}" type="hidden">
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">是否通过：</label>
@@ -88,6 +90,12 @@
                     <select name="passed" class="form-control m-b" th:with="type=${@dict.getType('pass_yes_no')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{passed}"></option>
                     </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">审核备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" th:field="*{remark}"class="form-control" rows="3"></textarea>
                 </div>
             </div>
         </form>

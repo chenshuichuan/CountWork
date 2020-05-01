@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('审核进展')" />
+</head>
+<body class="white-bg">
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default"id="begin">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                提交数据
+            </h4>
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //拿到审核单列表
+    var checkList = /*[[${checkList}]]*/ 2;
+    /*]]>*/
+</script>
+<script>
+    $(document).ready(function () {
+        var str = "";
+        if(checkList.length<1){
+            str =""
+        }
+        else{
+            $("#begin").after(genNext(checkList[0].status,checkList[0].passed));
+            for(var i=0;i<checkList.length;i++){
+                $("#begin").after(singleStatus(checkList[i]));
+            }
+        }
+    });
+    function getWorkStatus(status) {
+        switch(status) {
+            case 1: return '管理员初审'; break;
+            case 2: return '核验员审核'; break;
+            case 3: return '管理员复审'; break;
+            case 4: return '学院审核'; break;
+            case 5: return '审核完成'; break;
+            default: return '未审核';
+        }
+    }
+    function getCheckStatus(status) {
+        switch(status) {
+            case 1: return '待管理员初审'; break;
+            case 2: return '待核验员审核'; break;
+            case 3: return '待管理员复审'; break;
+            case 4: return '待学院审核'; break;
+            case 5: return '审核完成'; break;
+            default: return '未审核';
+        }
+    }
+
+    //前半段单个status展示
+    function singleStatus(check) {
+        var divId = Math.random().toString(36).substr(2);
+        var str ="";
+        //待处理
+        if(check.passed == 0){
+            str = "<div class=\"panel panel-default\">\n" +
+                "        <div class=\"panel-heading\">\n" +
+                "            <h4 class=\"panel-title\">\n" +
+                "                <a data-toggle=\"collapse\" data-parent=\"#accordion\"\n" +
+                "                   href=\"#"+divId+"\">\n" +
+                getCheckStatus(check.status) +
+                "                </a>\n" +
+                "            </h4>\n" +
+                "        </div>\n" +
+                "        <div id=\""+divId+"\" class=\"panel-collapse collapse\">\n" +
+                "            <div class=\"panel-body\">\n" +
+                "                <span>审核备注：</span>\n" +
+                    check.remark+
+                "            </div>\n" +
+                "        </div>\n" +
+                "    </div>";
+        }
+        else{
+            //不通过
+            if(check.passed==2){
+                str = "<div class=\"panel panel-default\">\n" +
+                    "        <div class=\"panel-heading\">\n" +
+                    "            <h4 class=\"panel-title\">\n" +
+                    "                <a data-toggle=\"collapse\" data-parent=\"#accordion\"\n" +
+                    "                   href=\"#"+divId+"\">\n" +
+                    getWorkStatus(check.status) +": 不通过"+
+                    "                </a>\n" +
+                    "            </h4>\n" +
+                    "        </div>\n" +
+                    "        <div id=\""+divId+"\" class=\"panel-collapse collapse\">\n" +
+                    "            <div class=\"panel-body\">\n" +
+                    "                <span>审核备注：</span>\n" +
+                    check.remark+
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "    </div>";
+            }
+            //通过
+            else if(check.passed==1){
+                str = "<div class=\"panel panel-default\">\n" +
+                    "        <div class=\"panel-heading\">\n" +
+                    "            <h4 class=\"panel-title\">\n" +
+                    "                <a data-toggle=\"collapse\" data-parent=\"#accordion\"\n" +
+                    "                   href=\"#"+divId+"\">\n" +
+                    getWorkStatus(check.status) +": 通过"+
+                    "                </a>\n" +
+                    "            </h4>\n" +
+                    "        </div>\n" +
+                    "        <div id=\""+divId+"\" class=\"panel-collapse collapse\">\n" +
+                    "            <div class=\"panel-body\">\n" +
+                    "                <span>审核备注：</span>\n" +
+                    check.remark+
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "    </div>";
+            }
+        }
+        return str;
+    }
+    //根据当前状态生成接下来的流程展示，也就是后半段流程未被审核的流程
+    //如果当前是4，而且pass，说明审核完成了
+    function genNext(status,passed) {
+        var str = "";
+        for (var i = status+1; i<5;i++){
+            str = str+ "<div class=\"panel panel-default\">\n" +
+                "        <div class=\"panel-heading\">\n" +
+                "            <h4 class=\"panel-title\">\n" +
+                "                <a data-toggle=\"collapse\" data-parent=\"#accordion\" \n" +
+                "                href=\"#collapseThree\">\n" +
+                getCheckStatus(i) +
+                "                </a>\n" +
+                "            </h4>\n" +
+                "        </div>\n" +
+                "    </div>" ;
+        }
+        //已经是完成状态
+        if(status==4&&passed==1){
+            str = str+ "<div class=\"panel panel-default\">\n" +
+                "        <div class=\"panel-heading\">\n" +
+                "            <h4 class=\"panel-title\">\n" +
+                "                <a data-toggle=\"collapse\" data-parent=\"#accordion\" \n" +
+                "                href=\"#collapseThree\">\n" +
+                "审核完成" +
+                "                </a>\n" +
+                "            </h4>\n" +
+                "        </div>\n" +
+                "    </div>" ;
+        }
+
+        return str;
+    }
+</script>
+
+</body>
+</html>

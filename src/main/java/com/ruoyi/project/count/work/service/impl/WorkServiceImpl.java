@@ -1,13 +1,17 @@
 package com.ruoyi.project.count.work.service.impl;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.common.utils.text.Convert;
+import com.ruoyi.project.count.history.domain.WorkHistory;
+import com.ruoyi.project.count.history.service.IWorkHistoryService;
 import com.ruoyi.project.count.work.domain.Work;
 import com.ruoyi.project.count.work.mapper.WorkMapper;
 import com.ruoyi.project.count.work.service.IWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,8 @@ public class WorkServiceImpl implements IWorkService
     @Autowired
     private WorkMapper workMapper;
 
+    @Autowired
+    private IWorkHistoryService workHistoryService;
     /**
      * 查询教学工作量
      * 
@@ -71,9 +77,29 @@ public class WorkServiceImpl implements IWorkService
     public int updateWork(Work work)
     {
         work.setUpdateTime(DateUtils.getNowDate());
+        Work oldWork = workMapper.selectWorkById(work.getId());
+        WorkHistory workHistory = genWorkHistory(oldWork);
+        workHistoryService.insertWorkHistory(workHistory);
         return workMapper.updateWork(work);
     }
-
+    private WorkHistory genWorkHistory(Work work){
+        WorkHistory workHistory = new WorkHistory();
+        workHistory.setWorkId(work.getId());
+        workHistory.setTerm(work.getTerm());
+        workHistory.setAcademy(work.getAcademy());
+        workHistory.setGrade(work.getGrade());
+        workHistory.setCourseCode(work.getCourseCode());
+        workHistory.setCourseName(work.getCourseName());
+        workHistory.setMajor(work.getMajor());
+        workHistory.setClassName(work.getClassName());
+        workHistory.setNumber(work.getNumber());
+        workHistory.setCredit(work.getCredit());
+        workHistory.setHours(work.getHours());
+        workHistory.setExperimentHours(work.getExperimentHours());
+        workHistory.setReviewer(ShiroUtils.getLoginName());
+        workHistory.setUpdateTime(new Date());
+        return workHistory;
+    }
     /**
      * 删除教学工作量对象
      * 

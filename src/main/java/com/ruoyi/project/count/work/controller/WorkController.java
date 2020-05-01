@@ -186,4 +186,27 @@ public class WorkController extends BaseController
         logger.debug(check.toString());
         return toAjax(processService.dealCheck(ShiroUtils.getSysUser(),check));
     }
+
+    /**
+     * 查看流程
+     */
+    @GetMapping("/viewStatus/{id}")
+    public String viewStatus(@PathVariable("id") Integer id, ModelMap mmap)
+    {
+        Work work = workService.selectWorkById(id);
+        List<Check> checks = checkRepository.findByWorkId(work.getId());
+        mmap.put("checkList",checks);
+        return prefix + "/viewStatus";
+    }
+    /**
+     * 查看流程
+     */
+    @GetMapping("/viewStatus2/{id}")
+    public String viewStatus2(@PathVariable("id") Integer id, ModelMap mmap)
+    {
+        Work work = workService.selectWorkById(id);
+        List<Check> checks = checkRepository.findByWorkId(work.getId());
+        mmap.put("checkList",checks);
+        return prefix + "/viewStatus2";
+    }
 }

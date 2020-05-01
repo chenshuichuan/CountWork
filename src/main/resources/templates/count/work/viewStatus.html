@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('审核进展')" />
+    <!--图标样式-->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css'>
+    <!--主要样式-->
+    <link rel="stylesheet"  th:href="@{/check/viewStatus/style.css}">
+</head>
+
+<body class="white-bg">
+
+<div class="toggle">
+    <span>☀</span>
+    <input type="checkbox" id="toggle-switch" />
+    <label for="toggle-switch"></label>
+    <span>🌙</span>
+</div>
+<div class="main-container">
+    <div class="steps-container">
+        <div class="step completed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
+            </svg>
+            <div class="label completed">
+                提交数据
+            </div>
+            <div class="icon completed">
+                <i class="fa fa-database"></i>
+            </div>
+        </div>
+
+        <div id="my-box"></div>
+    </div>
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //拿到审核单列表
+    var checkList = /*[[${checkList}]]*/ 2;
+    /*]]>*/
+</script>
+
+<script>
+    const toggleSwitch = document.getElementById('toggle-switch');
+
+    toggleSwitch.onchange = e => {
+        document.documentElement.classList.toggle('dark-mode');
+    };
+    $(document).ready(function () {
+        var str = "";
+        if(checkList.length<1){
+            str =""
+        }
+        else{
+            $("#my-box").after(genNext(checkList[0].status,checkList[0].passed));
+            for(var i=0;i<checkList.length;i++){
+                $("#my-box").after(singleStatus(checkList[i].status,checkList[i].passed));
+            }
+        }
+    });
+    function getWorkStatus(status) {
+        switch(status) {
+            case 1: return '管理员初审'; break;
+            case 2: return '核验员审核'; break;
+            case 3: return '管理员复审'; break;
+            case 4: return '学院审核'; break;
+            case 5: return '审核完成'; break;
+            default: return '未审核';
+        }
+    }
+    function getCheckStatus(status) {
+        switch(status) {
+            case 1: return '待管理员初审'; break;
+            case 2: return '待核验员审核'; break;
+            case 3: return '待管理员复审'; break;
+            case 4: return '待学院审核'; break;
+            case 5: return '审核完成'; break;
+            default: return '未审核';
+        }
+    }
+
+    //前半段单个status展示
+    function singleStatus(status,passed) {
+        var str ="";
+        //待处理
+        if(passed == 0){
+            str = "<div class=\"line next-step-in-progress\">\n" +
+                "  </div>\n" +
+                "  <div class=\"step in-progress\">\n" +
+                "      <div class=\"preloader\"></div>\n" +
+                "      <div class=\"label loading\">\n" +
+                 getCheckStatus(status) +
+                "      </div>\n" +
+                "      <div class=\"icon in-progress\">\n" +
+                "         <i class=\"fa fa-user-circle\"></i>\n" +
+                "      </div>\n" +
+                "  </div>";
+        }
+        else{
+            //不通过
+            if(passed==2){
+                str = str +   "<div class=\"line completed\"></div>"+
+                    " <div class=\"step uncompleted\">\n" +
+                    "            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
+                    "                <path d=\"M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z\" />\n" +
+                    "            </svg>\n" +
+                    "            <div class=\"label uncompleted\">\n" +
+                    "                "+getWorkStatus(status)+"\n" +
+                    "            </div>\n"+
+                    "<div class=\"icon uncompleted\">\n" +
+                    "                <i class=\"fa fa-user-circle\"></i>\n" +
+                    "          </div>\n" ;
+            }
+            //通过
+            else if(passed==1){
+                str = str +  "<div class=\"line completed\"></div>"+
+                    " <div class=\"step completed\">\n" +
+                    "            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">\n" +
+                    "                <path d=\"M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z\" />\n" +
+                    "            </svg>\n" +
+                    "            <div class=\"label completed\">\n" +
+                    "                "+getWorkStatus(status)+"\n" +
+                    "            </div>\n"+
+                            "<div class=\"icon completed\">\n" +
+                    "                <i class=\"fa fa-user-circle\"></i>\n" +
+                    "          </div>\n" ;
+            }
+            str = str + "</div>";
+        }
+        return str;
+    }
+    //根据当前状态生成接下来的流程展示，也就是后半段流程未被审核的流程
+    //如果当前是4，而且pass，说明审核完成了
+    function genNext(status,passed) {
+        var str = "";
+        for (var i = status+1; i<5;i++){
+            str=str+"<div class=\"line prev-step-in-progress\"></div>\n" +
+                "        <div class=\"step\">\n" +
+                "            <div class=\"label\">\n" +
+                getCheckStatus(i)+
+                "            </div>\n" +
+                "            <div class=\"icon\">\n" +
+                "                <i class=\"fa fa-user\"></i>\n" +
+                "            </div>\n" +
+                "        </div>"
+        }
+        //已经是完成状态
+        if(status==4&&passed==1){
+            str = str+"<div class=\"line completed\"></div>" +
+                "        <div class=\"step completed\">" +
+                "            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">" +
+                "                <path d=\"M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z\" />" +
+                "            </svg>" +
+                "            <div class=\"label completed\">" +
+                "审核完成" +
+                "            </div>" +
+                "            <div class=\"icon completed\">" +
+                "                <i class=\"fa fa-circle\"></i>" +
+                "            </div>" +
+                "        </div>";
+        }else{
+            str = str+"<div class=\"line\"></div>\n" +
+                "        <div class=\"step\">\n" +
+                "            <div class=\"label\">" +
+                "审核完成" +
+                "            </div>\n" +
+                "            <div class=\"icon\">\n" +
+                "                <i class=\"fa fa-circle\"></i>\n" +
+                "            </div>\n" +
+                "\n" +
+                "        </div>"
+        }
+        return str;
+    }
+</script>
+
+</body>
+</html>

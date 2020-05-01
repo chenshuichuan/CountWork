@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.count.history.mapper.WorkHistoryMapper">
+    
+    <resultMap type="WorkHistory" id="WorkHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="workId"    column="work_id"    />
+        <result property="term"    column="term"    />
+        <result property="academy"    column="academy"    />
+        <result property="grade"    column="grade"    />
+        <result property="courseCode"    column="course_code"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="major"    column="major"    />
+        <result property="className"    column="class_name"    />
+        <result property="number"    column="number"    />
+        <result property="credit"    column="credit"    />
+        <result property="hours"    column="hours"    />
+        <result property="experimentHours"    column="experiment_hours"    />
+        <result property="reviewer"    column="reviewer"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWorkHistoryVo">
+        select id, work_id, term, academy, grade, course_code, course_name, major, class_name, number, credit, hours, experiment_hours, reviewer, create_time, update_time from cw_work_history
+    </sql>
+
+    <select id="selectWorkHistoryList" parameterType="WorkHistory" resultMap="WorkHistoryResult">
+        <include refid="selectWorkHistoryVo"/>
+        <where>  
+            <if test="workId != null "> and work_id = #{workId}</if>
+            <if test="term != null  and term != ''"> and term = #{term}</if>
+            <if test="academy != null  and academy != ''"> and academy = #{academy}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="courseCode != null  and courseCode != ''"> and course_code = #{courseCode}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="major != null  and major != ''"> and major = #{major}</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="credit != null "> and credit = #{credit}</if>
+            <if test="hours != null "> and hours = #{hours}</if>
+            <if test="experimentHours != null "> and experiment_hours = #{experimentHours}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+        </where>
+    </select>
+    
+    <select id="selectWorkHistoryById" parameterType="Integer" resultMap="WorkHistoryResult">
+        <include refid="selectWorkHistoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWorkHistory" parameterType="WorkHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into cw_work_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workId != null ">work_id,</if>
+            <if test="term != null  and term != ''">term,</if>
+            <if test="academy != null  and academy != ''">academy,</if>
+            <if test="grade != null  and grade != ''">grade,</if>
+            <if test="courseCode != null  and courseCode != ''">course_code,</if>
+            <if test="courseName != null  and courseName != ''">course_name,</if>
+            <if test="major != null  and major != ''">major,</if>
+            <if test="className != null  and className != ''">class_name,</if>
+            <if test="number != null ">number,</if>
+            <if test="credit != null ">credit,</if>
+            <if test="hours != null ">hours,</if>
+            <if test="experimentHours != null ">experiment_hours,</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workId != null ">#{workId},</if>
+            <if test="term != null  and term != ''">#{term},</if>
+            <if test="academy != null  and academy != ''">#{academy},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="courseCode != null  and courseCode != ''">#{courseCode},</if>
+            <if test="courseName != null  and courseName != ''">#{courseName},</if>
+            <if test="major != null  and major != ''">#{major},</if>
+            <if test="className != null  and className != ''">#{className},</if>
+            <if test="number != null ">#{number},</if>
+            <if test="credit != null ">#{credit},</if>
+            <if test="hours != null ">#{hours},</if>
+            <if test="experimentHours != null ">#{experimentHours},</if>
+            <if test="reviewer != null  and reviewer != ''">#{reviewer},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWorkHistory" parameterType="WorkHistory">
+        update cw_work_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workId != null ">work_id = #{workId},</if>
+            <if test="term != null  and term != ''">term = #{term},</if>
+            <if test="academy != null  and academy != ''">academy = #{academy},</if>
+            <if test="grade != null  and grade != ''">grade = #{grade},</if>
+            <if test="courseCode != null  and courseCode != ''">course_code = #{courseCode},</if>
+            <if test="courseName != null  and courseName != ''">course_name = #{courseName},</if>
+            <if test="major != null  and major != ''">major = #{major},</if>
+            <if test="className != null  and className != ''">class_name = #{className},</if>
+            <if test="number != null ">number = #{number},</if>
+            <if test="credit != null ">credit = #{credit},</if>
+            <if test="hours != null ">hours = #{hours},</if>
+            <if test="experimentHours != null ">experiment_hours = #{experimentHours},</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer = #{reviewer},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWorkHistoryById" parameterType="Integer">
+        delete from cw_work_history where id = #{id}
+    </delete>
+
+    <delete id="deleteWorkHistoryByIds" parameterType="String">
+        delete from cw_work_history where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
