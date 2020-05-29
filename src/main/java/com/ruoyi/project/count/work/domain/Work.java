@@ -79,10 +79,22 @@ public class Work
     @Column(name = "experiment_hours" )
     private Float experimentHours;
 
+    @Excel(name = "课程性质")
+    @Column(name = "kind" )
+    private String kind;
+
+    @Excel(name = "周学时")
+    @Column(name = "week_hours" )
+    private String weekHours;
+
     /** 审核人 */
     @Excel(name = "审核人")
     @Column(name = "reviewer" )
     private String reviewer;
+
+    @Excel(name = "系数类别")
+    @Column(name = "modulus_kind" )
+    private String modulusKind;
 
     /** 是否通过 */
     @Excel(name = "是否通过")
@@ -128,6 +140,35 @@ public class Work
         this.nextStatus = nextStatus;
         this.updateTime = updateTime;
         this.counted = counted;
+    }
+
+    public void setKind( String kind,String weekHours,String modulusKind){
+        this.kind = kind;
+        this.weekHours = weekHours;
+        this.modulusKind = modulusKind;
+    }
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getWeekHours() {
+        return weekHours;
+    }
+
+    public void setWeekHours(String weekHours) {
+        this.weekHours = weekHours;
+    }
+
+    public String getModulusKind() {
+        return modulusKind;
+    }
+
+    public void setModulusKind(String modulusKind) {
+        this.modulusKind = modulusKind;
     }
 
     public Integer getCheckId() {

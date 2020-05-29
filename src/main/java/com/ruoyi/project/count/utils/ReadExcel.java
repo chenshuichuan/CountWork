@@ -40,7 +40,7 @@ public class ReadExcel {
         for (int r = 1; r < rowCount; r++) {
             Row row = sheet.getRow(r);
             //int cellCount = row.getPhysicalNumberOfCells();
-            int cellCount = 10;
+            int cellCount = 13;
             Work temp = new Work(new Date(),file.getFileName(),academy);
             temp.setSomeStatus(0,0,1,0,new Date());
             for (int c = 0; c < cellCount; c++) {
@@ -109,12 +109,26 @@ public class ReadExcel {
                         if (cellTypeEnum.equals(CellType.NUMERIC))
                             temp.setExperimentHours((float)cell.getNumericCellValue());
                         break;
-                    //考核方
+                    //课程性质
                     case 9:
+                        if (cellTypeEnum.equals(CellType.STRING))
+                            temp.setKind(cell.getStringCellValue());
+                        break;
+                    //周学时
+                    case 10:
+                        if (cellTypeEnum.equals(CellType.STRING))
+                            temp.setWeekHours(cell.getStringCellValue());
+                        break;
+                    //考核方
+                    case 11:
                         if (cellTypeEnum.equals(CellType.STRING))
                             temp.setReviewer(cell.getStringCellValue());
                         break;
-
+                    //系数类别
+                    case 12:
+                        if (cellTypeEnum.equals(CellType.STRING))
+                            temp.setModulusKind(cell.getStringCellValue());
+                        break;
                     default:
                         break;
                 }

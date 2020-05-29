@@ -18,6 +18,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="hours"    column="hours"    />
         <result property="experimentHours"    column="experiment_hours"    />
         <result property="reviewer"    column="reviewer"    />
+        <result property="kind"    column="kind"    />
+        <result property="weekHours"    column="week_hours"    />
+        <result property="modulusKind"    column="modulus_kind"    />
         <result property="isOk"    column="is_ok"    />
         <result property="status"    column="status"    />
         <result property="nextStatus"    column="next_status"    />
@@ -28,7 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectWorkVo">
-        select id, term, academy, grade, course_code, course_name, major, class_name, number, credit, hours, experiment_hours, reviewer, is_ok, status, next_status, counted, create_time, update_time, check_id from cw_work
+        select id, term, academy, grade, course_code, course_name, major, class_name, number, credit, hours, experiment_hours, reviewer,
+        kind,week_hours,modulus_kind,is_ok, status, next_status, counted, create_time, update_time, check_id from cw_work
     </sql>
 
     <select id="selectWorkList" parameterType="Work" resultMap="WorkResult">
@@ -46,6 +50,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null "> and hours = #{hours}</if>
             <if test="experimentHours != null "> and experiment_hours = #{experimentHours}</if>
             <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="kind != null  and kind != ''"> and kind = #{kind}</if>
+            <if test="weekHours != null  and weekHours != ''"> and week_hours = #{weekHours}</if>
+            <if test="modulusKind != null  and modulusKind != ''"> and modulus_kind = #{modulusKind}</if>
             <if test="isOk != null "> and is_ok = #{isOk}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="nextStatus != null "> and next_status = #{nextStatus}</if>
@@ -68,6 +75,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="major != null  and major != ''"> and major = #{major}</if>
             <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
             <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="kind != null  and kind != ''"> and kind = #{kind}</if>
+            <if test="weekHours != null  and weekHours != ''"> and week_hours = #{weekHours}</if>
+            <if test="modulusKind != null  and modulusKind != ''"> and modulus_kind = #{modulusKind}</if>
             <if test="isOk != null "> and is_ok = #{isOk}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="nextStatus != null "> and next_status = #{nextStatus}</if>
@@ -96,6 +106,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null ">hours,</if>
             <if test="experimentHours != null ">experiment_hours,</if>
             <if test="reviewer != null  and reviewer != ''">reviewer,</if>
+            <if test="kind != null  and kind != ''">kind,</if>
+            <if test="weekHours != null  and weekHours != ''">week_hours,</if>
+            <if test="modulusKind != null  and modulusKind != ''">modulus_kind,</if>
             <if test="isOk != null ">is_ok,</if>
             <if test="status != null ">status,</if>
             <if test="nextStatus != null ">next_status,</if>
@@ -117,6 +130,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null ">#{hours},</if>
             <if test="experimentHours != null ">#{experimentHours},</if>
             <if test="reviewer != null  and reviewer != ''">#{reviewer},</if>
+            <if test="kind != null  and kind != ''">#{kind},</if>
+            <if test="weekHours != null  and weekHours != ''">#{week_hours},</if>
+            <if test="modulusKind != null  and modulusKind != ''">#{modulus_kind},</if>
             <if test="isOk != null ">#{isOk},</if>
             <if test="status != null ">#{status},</if>
             <if test="nextStatus != null ">#{nextStatus},</if>
@@ -142,6 +158,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null ">hours = #{hours},</if>
             <if test="experimentHours != null ">experiment_hours = #{experimentHours},</if>
             <if test="reviewer != null  and reviewer != ''">reviewer = #{reviewer},</if>
+            <if test="kind != null  and kind != ''">kind = #{kind},</if>
+            <if test="weekHours != null  and weekHours != ''">week_hours = #{weekHours},</if>
+            <if test="modulusKind != null  and modulusKind != ''">modulus_kind = #{modulusKind},</if>
             <if test="isOk != null ">is_ok = #{isOk},</if>
             <if test="status != null ">status = #{status},</if>
             <if test="nextStatus != null ">next_status = #{nextStatus},</if>

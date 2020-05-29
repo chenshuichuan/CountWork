@@ -98,7 +98,6 @@
                 <table id="bootstrap-table"></table>
             </div>
         </div>
-
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
@@ -171,10 +170,22 @@
                     field: 'experimentHours', 
                     title: '实验学时'
                 },
+                    {
+                        field: 'kind',
+                        title: '课程性质'
+                    },
+                    {
+                        field: 'weekHours',
+                        title: '周学时'
+                    },
                 {
                     field: 'reviewer', 
                     title: '审核人'
                 },
+                    {
+                        field: 'modulusKind',
+                        title: '系数类别'
+                    },
                 {
                     field: 'isOk', 
                     title: '是否通过'
