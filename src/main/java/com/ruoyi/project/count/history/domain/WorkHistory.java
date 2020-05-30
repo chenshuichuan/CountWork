@@ -83,10 +83,23 @@ public class WorkHistory
     @Column(name = "experiment_hours" )
     private Float experimentHours;
 
+
+    @Excel(name = "课程性质")
+    @Column(name = "kind" )
+    private String kind;
+
+    @Excel(name = "周学时")
+    @Column(name = "week_hours" )
+    private String weekHours;
+
     /** 更改人 */
-    @Excel(name = "审核人")
+    @Excel(name = "更改人")
     @Column(name = "reviewer" )
     private String reviewer;
+
+    @Excel(name = "系数类别")
+    @Column(name = "modulus_kind" )
+    private String modulusKind;
 
     /** 创建时间 */
     @Column(name = "create_time")
@@ -99,6 +112,30 @@ public class WorkHistory
 
     public Integer getWorkId() {
         return workId;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getWeekHours() {
+        return weekHours;
+    }
+
+    public void setWeekHours(String weekHours) {
+        this.weekHours = weekHours;
+    }
+
+    public String getModulusKind() {
+        return modulusKind;
+    }
+
+    public void setModulusKind(String modulusKind) {
+        this.modulusKind = modulusKind;
     }
 
     public void setWorkId(Integer workId) {

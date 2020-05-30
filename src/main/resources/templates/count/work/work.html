@@ -1,226 +1,233 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('教学工作量列表')" />
+    <th:block th:include="include :: header('教学工作量列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <label>统计批次：</label>
-                                <input type="text" name="term"/>
-                            </li>
-                            <li>
-                                <label>学院：</label>
-                                <input type="text" name="academy"/>
-                            </li>
-                            <li>
-                                <label>年级：</label>
-                                <input type="text" name="grade"/>
-                            </li>
-                            <li>
-                                <label>课程代码：</label>
-                                <input type="text" name="courseCode"/>
-                            </li>
-                            <li>
-                                <label>课程名称：</label>
-                                <input type="text" name="courseName"/>
-                            </li>
-                            <li>
-                                <label>专业名称：</label>
-                                <input type="text" name="major"/>
-                            </li>
-                            <li>
-                                <label>班级名称：</label>
-                                <input type="text" name="className"/>
-                            </li>
-                            <li>
-                                <label>审核人：</label>
-                                <input type="text" name="reviewer"/>
-                            </li>
-                            <li>
-                                <label>是否通过：</label>
-                                <!--<input type="text" name="isOk"/>-->
-                                <select name="isOk" th:with="type=${@dict.getType('check_pass')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>审核状态：</label>
-                                <select name="status" th:with="type=${@dict.getType('check_status')}">
-                                     <option value="">所有</option>
-                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>下一步骤：</label>
-                                <select name="nextStatus" th:with="type=${@dict.getType('check_next')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>已统计：</label>
-                                <select name="counted" th:with="type=${@dict.getType('sys_yes_no')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>统计批次：</label>
+                            <input type="text" name="term"/>
+                        </li>
+                        <li>
+                            <label>学院：</label>
+                            <input type="text" name="academy"/>
+                        </li>
+                        <li>
+                            <label>年级：</label>
+                            <input type="text" name="grade"/>
+                        </li>
+                        <li>
+                            <label>课程代码：</label>
+                            <input type="text" name="courseCode"/>
+                        </li>
+                        <li>
+                            <label>课程名称：</label>
+                            <input type="text" name="courseName"/>
+                        </li>
+                        <li>
+                            <label>专业名称：</label>
+                            <input type="text" name="major"/>
+                        </li>
+                        <li>
+                            <label>班级名称：</label>
+                            <input type="text" name="className"/>
+                        </li>
+                        <li>
+                            <label>审核人：</label>
+                            <input type="text" name="reviewer"/>
+                        </li>
+                        <li>
+                            <label>是否通过：</label>
+                            <!--<input type="text" name="isOk"/>-->
+                            <select name="isOk" th:with="type=${@dict.getType('check_pass')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>审核状态：</label>
+                            <select name="status" th:with="type=${@dict.getType('check_status')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>下一步骤：</label>
+                            <select name="nextStatus" th:with="type=${@dict.getType('check_next')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>已统计：</label>
+                            <select name="counted" th:with="type=${@dict.getType('sys_yes_no')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="count:work:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="count:work:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="count:work:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="count:work:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="count:work:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="count:work:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="count:work:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="count:work:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('count:work:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('count:work:remove')}]];
-        var checkStatus = [[${@dict.getType('check_status')}]];
-        var checkNext = [[${@dict.getType('check_next')}]];
-        var isOk = [[${@dict.getType('check_pass')}]];
-        var counted = [[${@dict.getType('check_yes_no')}]];
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('count:work:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('count:work:remove')}]];
+    var checkStatus = [[${@dict.getType('check_status')}]];
+    var checkNext = [[${@dict.getType('check_next')}]];
+    var isOk = [[${@dict.getType('check_pass')}]];
+    var counted = [[${@dict.getType('check_yes_no')}]];
 
-        var prefix = ctx + "count/work";
+    var prefix = ctx + "count/work";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "教学工作量",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "教学工作量",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field: 'id', 
+                    field: 'id',
                     title: 'id',
                     visible: false
                 },
                 {
-                    field: 'term', 
+                    field: 'term',
                     title: '学期'
                 },
                 {
-                    field: 'academy', 
+                    field: 'academy',
                     title: '学院'
                 },
                 {
-                    field: 'grade', 
+                    field: 'grade',
                     title: '年级'
                 },
                 {
-                    field: 'courseCode', 
+                    field: 'courseCode',
                     title: '课程代码'
                 },
                 {
-                    field: 'courseName', 
+                    field: 'courseName',
                     title: '课程名称'
                 },
                 {
-                    field: 'major', 
+                    field: 'major',
                     title: '专业名称'
                 },
                 {
-                    field: 'className', 
+                    field: 'className',
                     title: '班级名称'
                 },
                 {
-                    field: 'number', 
+                    field: 'number',
                     title: '班级人数'
                 },
                 {
-                    field: 'credit', 
+                    field: 'credit',
                     title: '学分'
                 },
                 {
-                    field: 'hours', 
+                    field: 'hours',
                     title: '学时'
                 },
                 {
-                    field: 'experimentHours', 
+                    field: 'experimentHours',
                     title: '实验学时'
                 },
-                    {
-                        field: 'kind',
-                        title: '课程性质'
-                    },
-                    {
-                        field: 'weekHours',
-                        title: '周学时'
-                    },
                 {
-                    field: 'reviewer', 
+                    field: 'kind',
+                    title: '课程性质'
+                },
+                {
+                    field: 'weekHours',
+                    title: '周学时'
+                },
+                {
+                    field: 'reviewer',
                     title: '审核人'
                 },
-                    {
-                        field: 'modulusKind',
-                        title: '系数类别'
-                    },
                 {
-                    field: 'isOk', 
+                    field: 'modulusKind',
+                    title: '系数类别'
+                },
+                {
+                    field: 'isOk',
                     title: '是否通过'
                     ,
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(isOk, value);
                     }
                 },
                 {
-                    field: 'status', 
+                    field: 'status',
                     title: '审核状态',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(checkStatus, value);
                     }
                 },
                 {
-                    field: 'nextStatus', 
+                    field: 'nextStatus',
                     title: '下一步骤',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(checkNext, value);
                     }
                 },
                 {
-                    field: 'counted', 
+                    field: 'counted',
                     title: '已统计',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(counted, value);
                     }
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
-                        if(row.isOk==0)actions.push('<a class="btn btn-primary btn-xs " href="#" onclick="checkWork(\'' + row.id + '\')"><i class="fa fa-file-excel-o"></i>审核</a> ');
+                        if (row.isOk == 0) actions.push('<a class="btn btn-primary btn-xs " href="#" onclick="checkWork(\'' + row.id + '\')"><i class="fa fa-file-excel-o"></i>审核</a> ');
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="viewProcess(\'' + row.id + '\')"><i class="fa fa-edit"></i>进展</a> ');
@@ -228,21 +235,22 @@
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        // 审核
-        function checkWork(workId) {
-            var url = prefix+"/check/"+workId;
-            $.modal.open("审核", url);
-        }
-        // 查看进展
-        function viewProcess(workId) {
-            var url = prefix+"/viewStatus/"+workId;
-            $.modal.open("审核进展", url);
-        }
-    </script>
+    // 审核
+    function checkWork(workId) {
+        var url = prefix + "/check/" + workId;
+        $.modal.open("审核", url);
+    }
+
+    // 查看进展
+    function viewProcess(workId) {
+        var url = prefix + "/viewStatus/" + workId;
+        $.modal.open("审核进展", url);
+    }
+</script>
 </body>
 
 </html>

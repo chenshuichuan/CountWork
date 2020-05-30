@@ -3,6 +3,9 @@ package com.ruoyi.project.count.utils;
 import com.ruoyi.project.count.check.domain.Check;
 import com.ruoyi.project.count.check.service.CheckRepository;
 import com.ruoyi.project.count.check.service.ICheckService;
+import com.ruoyi.project.count.result.domain.Result;
+import com.ruoyi.project.count.result.service.IResultService;
+import com.ruoyi.project.count.result.service.ResultRepository;
 import com.ruoyi.project.count.work.domain.Work;
 import com.ruoyi.project.count.work.service.IWorkService;
 import com.ruoyi.project.count.work.service.WorkRepository;
@@ -27,6 +30,11 @@ public class ProcessServiceImpl implements IProcessService {
     private WorkRepository workRepository;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IResultService resultService;
+    @Autowired
+    private ResultRepository resultRepository;
+
     @Override
     public Integer addAndSaveCheck(Work work, Integer status,String reviewer) {
         logger.debug("生成审核单：workId="+work.getId());
@@ -61,6 +69,9 @@ public class ProcessServiceImpl implements IProcessService {
             work.setStatus(nextStatus);
             work.setIsOk(check.getPassed());
             work.setUpdateTime(new Date());
+            //计算工作量
+            Result result = resultService.countResult(work);
+            resultRepository.save(result);
         }
         //审核仍要继续，仍要生成下一status 的审核单
         else{

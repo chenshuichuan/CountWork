@@ -19,12 +19,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="hours"    column="hours"    />
         <result property="experimentHours"    column="experiment_hours"    />
         <result property="reviewer"    column="reviewer"    />
+        <result property="kind"    column="kind"    />
+        <result property="weekHours"    column="week_hours"    />
+        <result property="modulusKind"    column="modulus_kind"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectWorkHistoryVo">
-        select id, work_id, term, academy, grade, course_code, course_name, major, class_name, number, credit, hours, experiment_hours, reviewer, create_time, update_time from cw_work_history
+        select id, work_id, term, academy, grade, course_code, course_name, major, class_name, number, credit, hours, experiment_hours, reviewer,
+        kind,week_hours,modulus_kind,create_time, update_time from cw_work_history
     </sql>
 
     <select id="selectWorkHistoryList" parameterType="WorkHistory" resultMap="WorkHistoryResult">
@@ -43,6 +47,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null "> and hours = #{hours}</if>
             <if test="experimentHours != null "> and experiment_hours = #{experimentHours}</if>
             <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="kind != null  and kind != ''"> and kind = #{kind}</if>
+            <if test="weekHours != null  and weekHours != ''"> and week_hours = #{weekHours}</if>
+            <if test="modulusKind != null  and modulusKind != ''"> and modulus_kind = #{modulusKind}</if>
         </where>
     </select>
     
@@ -67,6 +74,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null ">hours,</if>
             <if test="experimentHours != null ">experiment_hours,</if>
             <if test="reviewer != null  and reviewer != ''">reviewer,</if>
+            <if test="kind != null  and kind != ''">kind,</if>
+            <if test="weekHours != null  and weekHours != ''">week_hours,</if>
+            <if test="modulusKind != null  and modulusKind != ''">modulus_kind,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="updateTime != null ">update_time,</if>
          </trim>
@@ -84,6 +94,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null ">#{hours},</if>
             <if test="experimentHours != null ">#{experimentHours},</if>
             <if test="reviewer != null  and reviewer != ''">#{reviewer},</if>
+            <if test="kind != null  and kind != ''">#{kind},</if>
+            <if test="weekHours != null  and weekHours != ''">#{week_hours},</if>
+            <if test="modulusKind != null  and modulusKind != ''">#{modulus_kind},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateTime != null ">#{updateTime},</if>
          </trim>
@@ -105,6 +118,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hours != null ">hours = #{hours},</if>
             <if test="experimentHours != null ">experiment_hours = #{experimentHours},</if>
             <if test="reviewer != null  and reviewer != ''">reviewer = #{reviewer},</if>
+            <if test="kind != null  and kind != ''">kind = #{kind},</if>
+            <if test="weekHours != null  and weekHours != ''">week_hours = #{weekHours},</if>
+            <if test="modulusKind != null  and modulusKind != ''">modulus_kind = #{modulusKind},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
         </trim>

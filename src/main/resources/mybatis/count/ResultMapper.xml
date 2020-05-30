@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.count.result.mapper.ResultMapper">
+    
+    <resultMap type="Result" id="ResultResult">
+        <result property="id"    column="id"    />
+        <result property="modulusKind"    column="modulus_kind"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="hours"    column="hours"    />
+        <result property="number"    column="number"    />
+        <result property="result"    column="result"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="reviewer"    column="reviewer"    />
+    </resultMap>
+
+    <sql id="selectResultVo">
+        select id, modulus_kind, course_name, class_name, hours, number, result, reviewer,update_time from cw_result
+    </sql>
+
+    <select id="selectResultList" parameterType="Result" resultMap="ResultResult">
+        <include refid="selectResultVo"/>
+        <where>  
+            <if test="modulusKind != null  and modulusKind != ''"> and modulus_kind = #{modulusKind}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="hours != null "> and hours = #{hours}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="result != null "> and result = #{result}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+        </where>
+    </select>
+    
+    <select id="selectResultById" parameterType="Long" resultMap="ResultResult">
+        <include refid="selectResultVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertResult" parameterType="Result">
+        insert into cw_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="modulusKind != null  and modulusKind != ''">modulus_kind,</if>
+            <if test="courseName != null  and courseName != ''">course_name,</if>
+            <if test="className != null  and className != ''">class_name,</if>
+            <if test="hours != null ">hours,</if>
+            <if test="number != null ">number,</if>
+            <if test="result != null ">result,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="modulusKind != null  and modulusKind != ''">#{modulusKind},</if>
+            <if test="courseName != null  and courseName != ''">#{courseName},</if>
+            <if test="className != null  and className != ''">#{className},</if>
+            <if test="hours != null ">#{hours},</if>
+            <if test="number != null ">#{number},</if>
+            <if test="result != null ">#{result},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="reviewer != null  and reviewer != ''">#{reviewer},</if>
+         </trim>
+    </insert>
+
+    <update id="updateResult" parameterType="Result">
+        update cw_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modulusKind != null  and modulusKind != ''">modulus_kind = #{modulusKind},</if>
+            <if test="courseName != null  and courseName != ''">course_name = #{courseName},</if>
+            <if test="className != null  and className != ''">class_name = #{className},</if>
+            <if test="hours != null ">hours = #{hours},</if>
+            <if test="number != null ">number = #{number},</if>
+            <if test="result != null ">result = #{result},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="reviewer != null  and reviewer != ''">reviewer = #{reviewer},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteResultById" parameterType="Long">
+        delete from cw_result where id = #{id}
+    </delete>
+
+    <delete id="deleteResultByIds" parameterType="String">
+        delete from cw_result where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
