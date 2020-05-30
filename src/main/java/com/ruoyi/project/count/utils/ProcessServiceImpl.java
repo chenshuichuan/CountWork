@@ -65,10 +65,12 @@ public class ProcessServiceImpl implements IProcessService {
         if(null == nextStatus)
             return 0;
         //审核结束
-        else if(5==nextStatus){
+        else if(4==nextStatus && check.passed()){
             work.setStatus(nextStatus);
             work.setIsOk(check.getPassed());
             work.setUpdateTime(new Date());
+            work.setCounted(1);
+            System.out.println("计算工作量---计算工作量---计算工作量---计算工作量--计算工作量");
             //计算工作量
             Result result = resultService.countResult(work);
             resultRepository.save(result);
